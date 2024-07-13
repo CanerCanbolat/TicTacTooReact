@@ -28,33 +28,28 @@ function Board({ xIsNext, squares, onPlay }) {
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
-
+  const rowCount = 3;
   return (
     <>
       <div className="status"> {status} </div>
-      {Array(3)
-        .fill(null)
-        .map((col, colIndex) => {
-          return (
-            <>
-              <div className="board-row" key={colIndex}>
-                {Array(3)
-                  .fill(null)
-                  .map((row, rowIndex) => {
-                    return (
-                      <Square
-                        key={rowIndex * 3 + colIndex}
-                        value={squares[rowIndex * 3 + colIndex]}
-                        onSquareClick={() =>
-                          handleClick(rowIndex * 3 + colIndex)
-                        }
-                      />
-                    );
-                  })}
-              </div>
-            </>
-          );
-        })}
+      {[...Array(rowCount).keys()].map((colIndex) => {
+        return (
+          <div>
+            <div className="board-row" key={colIndex}>
+              {[...Array(rowCount).keys()].map((rowIndex) => {
+                const i = rowIndex * rowCount + colIndex;
+                return (
+                  <Square
+                    key={i}
+                    value={squares[i]}
+                    onSquareClick={() => handleClick(i)}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }
