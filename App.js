@@ -18,27 +18,29 @@ function Board({ xIsNext, squares, onPlay }) {
       return;
     }
     const nextSquares = squares.slice();
-    if (xIsNext) {
+    if (xIsNext) {        // manage to next players.
       nextSquares[i] = "X";
     } else {
       nextSquares[i] = "O";
     }
     onPlay(nextSquares);
   }
-  const winnerInfo = calculateWinner(squares);
+  const winnerInfo = calculateWinner(squares);   // Checking  winner
   const winner = winnerInfo ? winnerInfo[0] : null;
   const winningLine = winnerInfo ? winnerInfo[1] : [];
 
   let status;
-  if (winner) {
+  if (winner) {      //Determine to who is winner or not
     status = "Winner: " + winner;
+  } else if (!squares.includes(null)) {
+    status = "Draw LOL!!!";
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
   const rowCount = 3;
   return (
-    <>
-      <div className="status"> {status} </div>
+    <>            // Create game board
+      <div className="status"> {status} </div>      
       {[...Array(rowCount).keys()].map((colIndex) => {
         return (
           <div>
@@ -72,6 +74,7 @@ export default function Game() {
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
+  // Go to the  game history
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
@@ -81,7 +84,7 @@ export default function Game() {
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
   }
-  const moves = history.map((squares, move) => {
+  const moves = history.map((squares, move) => {    // Back to the past
     let description = move ? `Go to move #${move}` : "Go to game start";
     return (
       <li key={move}>
@@ -94,7 +97,7 @@ export default function Game() {
     );
   });
 
-  function handleSortHistory() {
+  function handleSortHistory() {        // Sort of history
     setIsAscending(!isAscending);
   }
   function handleRestart() {
@@ -117,7 +120,8 @@ export default function Game() {
   );
 }
 
-function calculateWinner(squares) {
+//Calculate to winning conditions
+function calculateWinner(squares) {    
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
